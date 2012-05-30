@@ -4,9 +4,9 @@ from StringIO import StringIO
 
 from flask import render_template, request
 
-from flaskext.uploads import UploadSet, IMAGES, TEXT, configure_uploads
+from flask.ext.uploads import UploadSet, IMAGES, TEXT, configure_uploads
 
-from flaskext.wtf import Form, TextField, FileField, FieldList, \
+from flask.ext.wtf import Form, TextField, FileField, FieldList, \
                          file_required, file_allowed
 
 from base import TestCase
@@ -25,13 +25,13 @@ class MultipleFileUploadForm(Form):
 
 class ImageUploadForm(Form):
 
-    upload = FileField("Upload file", 
+    upload = FileField("Upload file",
                        validators=[file_required(),
                                    file_allowed(images)])
 
 class TextUploadForm(Form):
 
-    upload = FileField("Upload file", 
+    upload = FileField("Upload file",
                        validators=[file_required(),
                                    file_allowed(text)])
 
@@ -39,7 +39,7 @@ class TextUploadForm(Form):
 
 class TestFileUpload(TestCase):
 
-  
+
     def create_app(self):
 
         app = super(TestFileUpload, self).create_app()
@@ -84,27 +84,27 @@ class TestFileUpload(TestCase):
             return render_template("upload.html",
                                    filedata=filedata,
                                    form=form)
-        
+
         return app
 
     def test_multiple_files(self):
 
         fps = [self.app.open_resource("flask.png") for i in xrange(3)]
-        data = [("uploads-%d" % i, fp) for i, fp in enumerate(fps)] 
+        data = [("uploads-%d" % i, fp) for i, fp in enumerate(fps)]
         response = self.client.post("/upload-multiple/", data=dict(data))
         assert response.status_code == 200
 
     def test_valid_file(self):
-        
+
         with self.app.open_resource("flask.png") as fp:
-            response = self.client.post("/upload-image/", 
+            response = self.client.post("/upload-image/",
                 data={'upload' : fp})
 
         assert "OK" in response.data
 
     def test_missing_file(self):
 
-        response = self.client.post("/upload-image/", 
+        response = self.client.post("/upload-image/",
                 data={'upload' : "test"})
 
         assert "invalid" in response.data
@@ -112,7 +112,7 @@ class TestFileUpload(TestCase):
     def test_invalid_file(self):
 
         with self.app.open_resource("flask.png") as fp:
-            response = self.client.post("/upload-text/", 
+            response = self.client.post("/upload-text/",
                 data={'upload' : fp})
 
         assert "invalid" in response.data
@@ -120,7 +120,7 @@ class TestFileUpload(TestCase):
 
     def test_invalid_file_2(self):
 
-        response = self.client.post("/upload/", 
+        response = self.client.post("/upload/",
                 data={'upload' : 'flask.png'})
 
         assert "flask.png</h3>" not in response.data

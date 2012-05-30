@@ -9,10 +9,10 @@ except ImportError:
 from flask import current_app
 from werkzeug import url_encode
 
-# use flaskext.babel for translations, if available
+# use flask.ext.babel for translations, if available
 
 try:
-    from flaskext.babel import gettext as _
+    from flask.ext.babel import gettext as _
 except ImportError:
     _ = lambda(s) : s
 
@@ -38,10 +38,10 @@ class RecaptchaWidget(object):
             frame_url='%snoscript?%s' % (server, query),
             options=json.dumps(options)
         )
-        
+
     def __call__(self, field, error=None, **kwargs):
         """Returns the recaptcha input HTML."""
-        
+
         if current_app.config.get('RECAPTCHA_USE_SSL', False):
 
             server = RECAPTCHA_SSL_API_SERVER
@@ -49,7 +49,7 @@ class RecaptchaWidget(object):
         else:
 
             server = RECAPTCHA_API_SERVER
-        
+
         try:
             public_key = current_app.config['RECAPTCHA_PUBLIC_KEY']
         except KeyError:

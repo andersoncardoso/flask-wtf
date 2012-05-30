@@ -1,5 +1,5 @@
 from base import TestCase
-from flaskext.wtf import html5
+from flask.ext.wtf import html5
 
 class DummyField(object):
     def __init__(self, data, name='f', label='', id='', type='TextField'):
