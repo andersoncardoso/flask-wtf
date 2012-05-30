@@ -1,6 +1,7 @@
-from flask import Flask, render_template, request
+# -*- coding: utf-8 -*-
+from flask import Flask, render_template
+from flask.ext.wtf import Form, FileField, FieldList
 
-from flask.ext.wtf import Form, FileField, FieldList, required
 
 class FileUploadForm(Form):
 
@@ -12,6 +13,7 @@ SECRET_KEY = 'secret'
 
 app = Flask(__name__)
 app.config.from_object(__name__)
+
 
 @app.route("/", methods=("GET", "POST",))
 def index():

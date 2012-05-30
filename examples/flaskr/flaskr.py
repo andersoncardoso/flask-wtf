@@ -12,12 +12,10 @@
     :license: BSD, see LICENSE for more details.
 """
 from __future__ import with_statement
-import sqlite3
-from contextlib import closing
-from flask import Flask, request, session, g, redirect, url_for, abort, \
-     render_template, flash
-from flask.ext.wtf import Form, TextField, TextAreaField, \
-    PasswordField, SubmitField, Required, ValidationError
+from flask import (Flask, session, redirect, url_for, abort,
+     render_template, flash)
+from flask.ext.wtf import (Form, TextField, TextAreaField,
+    PasswordField, SubmitField, Required, ValidationError)
 from flask.ext.sqlalchemy import SQLAlchemy
 
 # configuration
@@ -35,6 +33,7 @@ app.config.from_envvar('FLASKR_SETTINGS', silent=True)
 
 db = SQLAlchemy(app)
 
+
 class Entry(db.Model):
 
     __tablename__ = "entries"
@@ -45,11 +44,13 @@ class Entry(db.Model):
 
 db.create_all()
 
+
 class EntryForm(Form):
 
     title = TextField("Title", validators=[Required()])
     text = TextAreaField("Text")
     submit = SubmitField("Share")
+
 
 class LoginForm(Form):
 
@@ -59,11 +60,12 @@ class LoginForm(Form):
 
     def validate_username(self, field):
         if field.data != USERNAME:
-            raise ValidationError, "Invalid username"
+            raise ValidationError("Invalid username")
 
     def validate_password(self, field):
         if field.data != PASSWORD:
-            raise ValidationError, "Invalid password"
+            raise ValidationError("Invalid password")
+
 
 @app.route('/')
 def show_entries():

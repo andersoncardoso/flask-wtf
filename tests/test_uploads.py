@@ -1,47 +1,39 @@
+# -*- coding: utf-8 -*-
 from __future__ import with_statement
-
 from StringIO import StringIO
 
 from flask import render_template, request
-
 from flask.ext.uploads import UploadSet, IMAGES, TEXT, configure_uploads
-
-from flask.ext.wtf import Form, TextField, FileField, FieldList, \
-                         file_required, file_allowed
+from flask.ext.wtf import (Form, TextField, FileField, FieldList,
+                         file_required, file_allowed)
 
 from base import TestCase
 
 images = UploadSet("images", IMAGES)
 text = UploadSet("text", TEXT)
 
-class FileUploadForm(Form):
 
+class FileUploadForm(Form):
     upload = FileField("Upload file")
 
-class MultipleFileUploadForm(Form):
 
+class MultipleFileUploadForm(Form):
     uploads = FieldList(FileField("upload"), min_entries=3)
 
 
 class ImageUploadForm(Form):
-
     upload = FileField("Upload file",
-                       validators=[file_required(),
-                                   file_allowed(images)])
+                       validators=[file_required(), file_allowed(images)])
+
 
 class TextUploadForm(Form):
-
     upload = FileField("Upload file",
-                       validators=[file_required(),
-                                   file_allowed(text)])
-
+                       validators=[file_required(), file_allowed(text)])
 
 
 class TestFileUpload(TestCase):
 
-
     def create_app(self):
-
         app = super(TestFileUpload, self).create_app()
         app.config['CSRF_ENABLED'] = False
         app.config['UPLOADED_FILES_DEST'] = 'uploads'
@@ -62,7 +54,6 @@ class TestFileUpload(TestCase):
                 return "OK"
             return "invalid"
 
-
         @app.route("/upload-multiple/", methods=("POST",))
         def upload_multiple():
             form = MultipleFileUploadForm()
@@ -81,10 +72,7 @@ class TestFileUpload(TestCase):
             else:
                 filedata = None
 
-            return render_template("upload.html",
-                                   filedata=filedata,
-                                   form=form)
-
+            return render_template("upload.html", filedata=filedata, form=form)
         return app
 
     def test_multiple_files(self):
@@ -95,34 +83,26 @@ class TestFileUpload(TestCase):
         assert response.status_code == 200
 
     def test_valid_file(self):
-
         with self.app.open_resource("flask.png") as fp:
             response = self.client.post("/upload-image/",
-                data={'upload' : fp})
-
+                data={'upload': fp})
         assert "OK" in response.data
 
     def test_missing_file(self):
-
         response = self.client.post("/upload-image/",
-                data={'upload' : "test"})
-
+                data={'upload': "test"})
         assert "invalid" in response.data
 
     def test_invalid_file(self):
-
         with self.app.open_resource("flask.png") as fp:
             response = self.client.post("/upload-text/",
-                data={'upload' : fp})
+                data={'upload': fp})
 
         assert "invalid" in response.data
 
-
     def test_invalid_file_2(self):
-
         response = self.client.post("/upload/",
-                data={'upload' : 'flask.png'})
-
+                data={'upload': 'flask.png'})
         assert "flask.png</h3>" not in response.data
 
 
@@ -136,12 +116,13 @@ text_data = [('text_fields-0', 'First input'),
 file_data = [('file_fields-0', (StringIO('contents 0'), 'file0.txt')),
              ('file_fields-1', (StringIO('contents 1'), 'file1.txt'))]
 
+
 class TestFileList(TestCase):
     def test_multiple_upload(self):
         with self.app.test_request_context(method='POST',
                                            data=dict(text_data + file_data)):
-            assert len(request.files) # the files have been added to the
-                                      # request
+            assert len(request.files)  # the files have been added to the
+                                       # request
 
             f = BrokenForm(csrf_enabled=False)
 

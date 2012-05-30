@@ -1,14 +1,13 @@
+# -*- coding: utf-8 -*-
 import urllib2
-
 from flask import request, current_app
-
 from wtforms import ValidationError
-
 from werkzeug import url_encode
 
 RECAPTCHA_VERIFY_SERVER = 'http://api-verify.recaptcha.net/verify'
 
 __all__ = ["Recaptcha"]
+
 
 class Recaptcha(object):
     """Validates a ReCaptcha."""
@@ -38,14 +37,14 @@ class Recaptcha(object):
 
     def _validate_recaptcha(self, challenge, response, remote_addr):
         """Performs the actual validation."""
-    
+
         if current_app.testing:
             return True
 
         try:
             private_key = current_app.config['RECAPTCHA_PRIVATE_KEY']
         except KeyError:
-            raise RuntimeError, "No RECAPTCHA_PRIVATE_KEY config set"
+            raise RuntimeError("No RECAPTCHA_PRIVATE_KEY config set")
 
         data = url_encode({
             'privatekey': private_key,
@@ -53,7 +52,6 @@ class Recaptcha(object):
             'challenge':  challenge,
             'response':   response
         })
-
 
         response = urllib2.urlopen(RECAPTCHA_VERIFY_SERVER, data)
 

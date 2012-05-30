@@ -1,13 +1,16 @@
+# -*- coding: utf-8 -*-
 from __future__ import with_statement
 
 from flask import Flask, render_template, jsonify
 from flask.ext.testing import TestCase as _TestCase
 from flask.ext.wtf import Form, TextField, HiddenField, SubmitField, Required
 
+
 class MyForm(Form):
     SECRET_KEY = "a poorly kept secret."
     name = TextField("Name", validators=[Required()])
     submit = SubmitField("Submit")
+
 
 class HiddenFieldsForm(Form):
     SECRET_KEY = "a poorly kept secret."
@@ -21,9 +24,11 @@ class HiddenFieldsForm(Form):
         super(HiddenFieldsForm, self).__init__(*args, **kwargs)
         self.method.name = '_method'
 
+
 class SimpleForm(Form):
     SECRET_KEY = "a poorly kept secret."
     pass
+
 
 class TestCase(_TestCase):
 
@@ -80,6 +85,5 @@ class TestCase(_TestCase):
             return jsonify(name=None,
                            errors=form.errors,
                            success=False)
-
 
         return app

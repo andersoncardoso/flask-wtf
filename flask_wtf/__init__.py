@@ -45,7 +45,7 @@ validators.FileAllowed = FileAllowed
 validators.FileRequired = FileRequired
 
 
-__all__  = ['Form', 'ValidationError',
+__all__ = ['Form', 'ValidationError',
             'fields', 'validators', 'widgets', 'html5']
 
 __all__ += validators.__all__
@@ -64,4 +64,3 @@ if _is_sqlalchemy:
                   QuerySelectMultipleField):
 
         setattr(fields, field.__name__, field)
-

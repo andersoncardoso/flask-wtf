@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from flask.ext.wtf.recaptcha import fields
 from flask.ext.wtf.recaptcha import  validators
 from flask.ext.wtf.recaptcha import  widgets
