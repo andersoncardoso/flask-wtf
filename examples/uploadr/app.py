@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request
 
-from flaskext.wtf import Form, FileField, FieldList, required
+from flask.ext.wtf import Form, FileField, FieldList, required
 
 class FileUploadForm(Form):
 
@@ -26,8 +26,8 @@ def index():
         for upload in form.uploads.entries:
             filedata.append(upload)
 
-    return render_template("index.html", 
-                           form=form, 
+    return render_template("index.html",
+                           form=form,
                            filedata=filedata)
 
 

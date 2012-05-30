@@ -1,5 +1,5 @@
 from flask import Flask, render_template, flash, session, redirect, url_for
-from flaskext.wtf import Form, TextAreaField, RecaptchaField, Required
+from flask.ext.wtf import Form, TextAreaField, RecaptchaField, Required
 
 DEBUG = True
 SECRET_KEY = 'secret'
@@ -13,7 +13,7 @@ app = Flask(__name__)
 app.config.from_object(__name__)
 
 class CommentForm(Form):
-    
+
     comment = TextAreaField("Comment", validators=[Required()])
     recaptcha = RecaptchaField()
 
@@ -22,7 +22,7 @@ def index(form=None):
     if form is None:
         form = CommentForm()
     comments = session.get("comments", [])
-    return render_template("index.html", 
+    return render_template("index.html",
                            comments=comments,
                            form=form)
 
@@ -37,7 +37,7 @@ def add_comment():
         flash("You have added a new comment")
         return redirect(url_for("index"))
     return index(form)
-    
+
 
 if __name__ == "__main__":
     app.run()
