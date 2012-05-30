@@ -73,14 +73,14 @@ Creating forms
 
 **Flask-WTF** provides you with all the API features of WTForms. For example::
 
-    from flaskext.wtf import Form, TextField, Required
+    from flask.ext.wtf import Form, TextField, Required
 
     class MyForm(Form):
         name = TextField(name, validators=[Required()])
 
 In addition, a CSRF token hidden field is created. You can print this in your template as any other field::
 
-    
+
     <form method="POST" action=".">
         {{ form.csrf_token }}
         {{ form.name.label }} {{ form.name(size=20) }}
@@ -89,7 +89,7 @@ In addition, a CSRF token hidden field is created. You can print this in your te
 
 However, in order to create valid XHTML/HTML the ``Form`` class has a method ``hidden_tag`` which renders any
 hidden fields, including the CSRF field, inside a hidden DIV tag::
-    
+
     <form method="POST" action=".">
         {{ form.hidden_tag() }}
 
@@ -149,15 +149,15 @@ Validating file uploads
 **Flask-WTF** supports validation through the `Flask Uploads <http://packages.python.org/Flask-Uploads/>`_ extension. If you use this (highly recommended) extension you can use it to add validation to your file fields. For example::
 
 
-    from flaskext.uploads import UploadSet, IMAGES
-    from flaskext.wtf import Form, FileField, file_allowed, \
+    from flask.ext.uploads import UploadSet, IMAGES
+    from flask.ext.wtf import Form, FileField, file_allowed, \
         file_required
 
     images = UploadSet("images", IMAGES)
 
     class UploadForm(Form):
 
-        upload = FileField("Upload your image", 
+        upload = FileField("Upload your image",
                            validators=[file_required(),
                                        file_allowed(images, "Images only!")])
 
@@ -169,9 +169,9 @@ HTML5 widgets
 
 **Flask-WTF** supports a number of HTML5 widgets. Of course, these widgets must be supported by your target browser(s) in order to be properly used.
 
-HTML5-specific widgets are available under the **flaskext.wtf.html5** package::
+HTML5-specific widgets are available under the **flask.ext.wtf.html5** package::
 
-    from flaskext.wtf.html5 import URLField
+    from flask.ext.wtf.html5 import URLField
 
     class LinkForm():
 
@@ -183,20 +183,20 @@ Recaptcha
 ---------
 
 **Flask-WTF** also provides Recaptcha support through a ``RecaptchaField``::
-    
-    from flaskext.wtf import Form, TextField, RecaptchaField
+
+    from flask.ext.wtf import Form, TextField, RecaptchaField
 
     class SignupForm(Form):
         username = TextField("Username")
         recaptcha = RecaptchaField()
 
-This field handles all the nitty-gritty details of Recaptcha validation and output. The following settings 
+This field handles all the nitty-gritty details of Recaptcha validation and output. The following settings
 are required in order to use Recaptcha:
 
     * ``RECAPTCHA_USE_SSL`` : default ``False``
     * ``RECAPTCHA_PUBLIC_KEY``
     * ``RECAPTCHA_PRIVATE_KEY``
-    * ``RECAPTCHA_OPTIONS`` 
+    * ``RECAPTCHA_OPTIONS``
 
 ``RECAPTCHA_OPTIONS`` is an optional dict of configuration options. The public and private keys are required in
 order to authenticate your request with Recaptcha - see `documentation <https://www.google.com/recaptcha/admin/create>`_ for details on how to obtain your keys.
@@ -207,18 +207,18 @@ Under test conditions (i.e. Flask app ``testing`` is ``True``) Recaptcha will al
                                 'recaptcha_challenge_field' : 'test',
                                 'recaptcha_response_field' : 'test'})
 
-If `flaskext-babel <http://packages.python.org/Flask-Babel/>`_ is installed then Recaptcha message strings can be localized.
+If `flask.ext-babel <http://packages.python.org/Flask-Babel/>`_ is installed then Recaptcha message strings can be localized.
 
 API changes
 -----------
 
-The ``Form`` class provided by **Flask-WTF** is the same as for WTForms, but with a couple of changes. Aside from CSRF 
+The ``Form`` class provided by **Flask-WTF** is the same as for WTForms, but with a couple of changes. Aside from CSRF
 validation, a convenience method ``validate_on_submit`` is added::
 
     from flask import Flask, request, flash, redirect, url_for, \
         render_template
-    
-    from flaskext.wtf import Form, TextField
+
+    from flask.ext.wtf import Form, TextField
 
     app = Flask(__name__)
 
@@ -227,7 +227,7 @@ validation, a convenience method ``validate_on_submit`` is added::
 
     @app.route("/submit/", methods=("GET", "POST"))
     def submit():
-        
+
         form = MyForm()
         if form.validate_on_submit():
             flash("Success")
@@ -239,7 +239,7 @@ Note the difference from a pure WTForms solution::
     from flask import Flask, request, flash, redirect, url_for, \
         render_template
 
-    from flaskext.wtf import Form, TextField
+    from flask.ext.wtf import Form, TextField
 
     app = Flask(__name__)
 
@@ -248,7 +248,7 @@ Note the difference from a pure WTForms solution::
 
     @app.route("/submit/", methods=("GET", "POST"))
     def submit():
-        
+
         form = MyForm(request.form)
         if request.method == "POST" and form.validate():
             flash("Success")
@@ -262,18 +262,18 @@ You don't need to pass ``request.form`` into your form instance, as the ``Form``
 API
 ---
 
-.. module:: flaskext.wtf
+.. module:: flask.ext.wtf
 
 .. autoclass:: Form
    :members:
-    
+
 .. autoclass:: RecaptchaField
 
 .. autoclass:: Recaptcha
 
 .. autoclass:: RecaptchaWidget
 
-.. module:: flaskext.wtf.file
+.. module:: flask.ext.wtf.file
 
 .. autoclass:: FileField
    :members:
@@ -282,7 +282,7 @@ API
 
 .. autoclass:: FileRequired
 
-.. module:: flaskext.wtf.html5
+.. module:: flask.ext.wtf.html5
 
 .. autoclass:: SearchInput
 
